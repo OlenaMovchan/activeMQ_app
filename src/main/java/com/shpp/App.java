@@ -21,9 +21,9 @@ public class App {
     public static void main(String[] args) throws Exception {
         String n = System.getProperty("n", "100000");
         LOGGER.info("Number of messages: " + n);
-        int numOfMessages = Integer.parseInt(n);//
+        int numOfMessages = Integer.parseInt(n);
         ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS+NUM_CONSUMERS);
-
+LOGGER.info("");
         GeneratorMessages generator = new GeneratorMessages();
 
         long startProd = System.currentTimeMillis();

@@ -24,6 +24,7 @@ public class App {
         int numOfMessages = Integer.parseInt(n);
         ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS+NUM_CONSUMERS);
 LOGGER.info(">>>>>");
+LOGGER.info(">>>>>");
         GeneratorMessages generator = new GeneratorMessages();
 
         long startProd = System.currentTimeMillis();

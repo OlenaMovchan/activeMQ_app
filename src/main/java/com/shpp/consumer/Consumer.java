@@ -14,15 +14,15 @@ public class Consumer {
 
     private String poisonPill = properties.getProperty("poisonPill");
     private String queue = properties.getProperty("queue");
-    private Connection connection;
-    private Session session;
-    private MessageConsumer messageConsumer;
+    public Connection connection;
+    public Session session;
+    public MessageConsumer messageConsumer;
     private Destination destination;
-    private ActiveMQConnectionFactory factory;
+    public ActiveMQConnectionFactory factory;
 
     public Consumer() {
         try {
-            factory = Connector.activeMQConnectionFactory();
+            factory = new Connector().connectToQueue();
             connection = factory.createConnection();
             connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
@@ -57,10 +57,10 @@ public class Consumer {
             session.close();
             connection.close();
             LOGGER.info("Closed consumer connection");
+            return true;
         } catch (Exception e) {
             LOGGER.info("Error closing consumer connection");
-            return true;
+            return false;
         }
-        return false;
     }
 }

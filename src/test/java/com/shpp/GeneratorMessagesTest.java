@@ -6,6 +6,7 @@ import com.shpp.producer.Producer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,52 +17,49 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 
+
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 class GeneratorMessagesTest {
-    @Mock
-    Producer producer;
-    @Mock
-    MessageClass pojo;
-    @BeforeEach
-    void setUp() {
 
-        MockitoAnnotations.openMocks(this);
-        //   Mockito.when(producer.send(pojo));
+    LocalDateTime now = LocalDateTime.now();
 
-    }
-    private static final Logger logger =
-            LoggerFactory.getLogger(GeneratorMessagesTest.class);
-    LocalDateTime periodEnd = LocalDateTime.now();
+    LocalDateTime specificTime = now
+            .withHour(14)
+            .withMinute(30)
+            .withSecond(45)
+            .withNano(0);
     MessageClass messageClass = new MessageClass();
 
     GeneratorMessages generatorMessages = new GeneratorMessages(2);
 
     @Test
-    void randomName() {
+    void generateRandomNameTest() {
+        MessageClass messageClass = new MessageClass();
         messageClass.setName("Www");
+        GeneratorMessages generatorMessages = new GeneratorMessages(2);
         assertNotEquals(messageClass.getName(), generatorMessages.generateRandomName(7));
-
     }
 
     @Test
-    void randomDate() {
-        messageClass.setDateTime(LocalDateTime.now());
-        assertNotEquals(generatorMessages.generateRandomCount(), messageClass.getDateTime());
-
+    void generateRandomDateTest() {
+        messageClass.setCreatedAt(specificTime);
+        assertNotEquals(generatorMessages.generateRandomDate(), messageClass.getCreatedAt());
     }
 
     @Test
-    void randomCount() {
-        assertNotEquals(messageClass.getCount(), 21);
+    void generateRandomCountTest() {
+        messageClass.setCount(10);
         assertNotEquals(generatorMessages.generateRandomCount(), messageClass.getCount());
-
     }
 
     @Test
-    void generateMessages() {
-        //String msg = null;
-        MessageClass msg = null;
-        Producer producer1=mock(Producer.class);
-        producer1.send("hello");
-        verify(producer1,times(1)).send("hello");
+    void sendMessageTest() {
+        Producer producer = mock(Producer.class);
+        producer.sendMessage("test");
+        verify(producer, times(1)).sendMessage("test");
     }
 }

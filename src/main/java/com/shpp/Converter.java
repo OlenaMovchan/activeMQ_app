@@ -15,24 +15,23 @@ public class Converter {
             .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             .registerModule(new JavaTimeModule());
 
-    public static String toJsonObject(MessageClass message){
-        String convertMessage = null;
+    public static String serialize(MessageClass message){
+        String serializedMessage = null;
         try {
-            convertMessage = mapper.writeValueAsString(message);
+            serializedMessage = mapper.writeValueAsString(message);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Json error of toString",e);
+            LOGGER.error("Serialization error", e);
         }
-        return convertMessage;
+        return serializedMessage;
     }
 
-    public static MessageClass toMessageObject(String json) {
+    public static MessageClass deserialize(String serializedMessage) {
         MessageClass message = null;
         try {
-            message = mapper.readValue(json, MessageClass.class);
+            message = mapper.readValue(serializedMessage, MessageClass.class);
         } catch (JsonProcessingException e) {
-            LOGGER.error("Json error of toMessage",e);
+            LOGGER.error("Deserialization error", e.getMessage());
         }
         return message;
     }
-
 }

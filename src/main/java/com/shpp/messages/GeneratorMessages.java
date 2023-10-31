@@ -14,11 +14,8 @@ import java.util.stream.Stream;
 public class GeneratorMessages {
     private Logger LOGGER = LoggerFactory.getLogger(GeneratorMessages.class);
     private LoadingProperties properties = new LoadingProperties();
-
     private String poisonPill = properties.getProperty("poisonPill");
-
     private String limitSeconds = properties.getProperty("limitSeconds");
-
     private AtomicInteger countSentMessages = new AtomicInteger(0);
     private Random random = new Random();
     private int countProducers;
@@ -63,15 +60,15 @@ public class GeneratorMessages {
                         generateRandomDate()))
                 .limit(maxN).takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds)*1000/countProducers+ startTime))
                 .forEach(message -> {
-                    producer.send(Converter.toJsonObject(message));
+                    producer.sendMessage(Converter.serialize(message));
                     countSentMessages.getAndIncrement();
                 });
         long elapsedTime = System.currentTimeMillis() - startTime;
-        producer.send(poisonPill);
+        producer.sendMessage(poisonPill);
         LOGGER.info("Total messages sent: " + countSentMessages.get());
         double sendingSpeed = countSentMessages.get() / (elapsedTime / 1000.0);
         LOGGER.info("Sending speed: " + sendingSpeed + " messages per second");
-        producer.closeConectionProducer();
+        producer.closeConection();
 
     }
 }

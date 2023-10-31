@@ -15,18 +15,15 @@ import java.util.concurrent.Executors;
 public class App {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-    private static final int NUM_PRODUCERS = 2; // Number of producer tasks
-    private static final int NUM_CONSUMERS = 2; // Number of consumer tasks
+    private static final int NUM_PRODUCERS = 2;
+    private static final int NUM_CONSUMERS = 2;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         String n = System.getProperty("n", "100000");
         LOGGER.info("Number of messages: " + n);
         int numOfMessages = Integer.parseInt(n);
         ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
-        LOGGER.info(">>>>>");
-        LOGGER.info(">>>>>");
         GeneratorMessages generator = new GeneratorMessages(NUM_PRODUCERS);
-
         long startProd = System.currentTimeMillis();
 
         for (int i = 0; i < NUM_PRODUCERS; i++) {
@@ -37,29 +34,18 @@ public class App {
         }
 
         long startConsumer = System.currentTimeMillis();
-        LOGGER.info("start cons ");
+
         for (int i = 0; i < NUM_CONSUMERS; i++) {
             MessageReceiver receiver = new MessageReceiver();
             Runnable consumerTask = new ConsumerTask(receiver);
             executor.execute(consumerTask);
         }
-
-
-        // Shutdown the executor and wait for all threads to complete
         executor.shutdown();
-//        if (!executor.isTerminated()) {
-//            executor.awaitTermination(5L, TimeUnit.SECONDS);
-//            executor.shutdownNow();
-//        }
         while (!executor.isTerminated()) {
-            //System.out.println("Thread is still processing.");
-            // loop until executor service is terminated
             try {
-                // continuous ping on executor service might effect performance
-                // so we set main thread to sleep for AWAIT_TIME
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-
+                LOGGER.error("Error");
             }
         }
         executor.shutdownNow();

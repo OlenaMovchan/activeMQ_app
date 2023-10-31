@@ -14,10 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MessageReceiver{
+public class MessageReceiver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageReceiver.class);
     private LoadingProperties properties = new LoadingProperties();
@@ -33,43 +34,37 @@ public class MessageReceiver{
 
         try (FileWriter valid = new FileWriter(validFile);
              FileWriter incorrect = new FileWriter(incorrectFile)) {
-            MessageClass message;
-            Consumer consumer = new Consumer();
+        MessageClass message;
+        Consumer consumer = new Consumer();
+        long startTime = System.currentTimeMillis();
 
-            long startTime = System.currentTimeMillis();
-            while (true) {
-                try {
-                    String messageReceived = consumer.receiveMessage();
-                    if (messageReceived == null || messageReceived.equals(poisonPill)) {
-                        long elapsedTime = System.currentTimeMillis() - startTime;
-                        double receivingngSpeed = countReceiveMessages.get() / (elapsedTime / 1000.0);
-                        LOGGER.info("Total messages received   " + countReceiveMessages.get());
-                        LOGGER.info("Receive speed: " + receivingngSpeed + " messages per second");
-                        consumer.closeConnection();
-                        break;
-                    }
-                    message = Converter.toMessageObject(messageReceived);
-                    countReceiveMessages.incrementAndGet();
-                    errors = validator.validate(message);
-                } catch (IllegalArgumentException e) {
-                    consumer.closeConnection();
-                    break;
-                }
-                if (errors.isEmpty()){
-                    valid.append(message.getName() + ", " + message.getCount() + "\n");
+        while (true) {
+            String messageReceived = consumer.receiveMessage();
+            if (messageReceived == null || messageReceived.equals(poisonPill)) {
+                long elapsedTime = System.currentTimeMillis() - startTime;
+                double receivingngSpeed = countReceiveMessages.get() / (elapsedTime / 1000.0);
+                LOGGER.info("Total messages received   " + countReceiveMessages.get());
+                LOGGER.info("Receive speed: " + receivingngSpeed + " messages per second");
+                consumer.closeConnection();
+                break;
+            }
+            message = Converter.deserialize(messageReceived);
+            countReceiveMessages.incrementAndGet();
+            errors = validator.validate(message);
+                if (errors.isEmpty()) {
+                    valid.write(message.getName() + "," + message.getCount() + "\n");
                     valid.flush();
                 } else {
-                    incorrect.append(stringCSVIncorrect(message, errors));
+                    incorrect.write(stringIncorrect(message, errors));
                     incorrect.flush();
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        }catch (IOException e) {
+            LOGGER.error("Error write", e.getMessage());
         }
     }
 
-    public String stringCSVIncorrect(MessageClass messageClass, Set<ConstraintViolation<MessageClass>> errors) {
+    public String stringIncorrect(MessageClass messageClass, Set<ConstraintViolation<MessageClass>> errors) {
         ObjectMapper mapper = new JsonMapper();
         String error = "";
         try {// {“errors”:[]}
@@ -79,6 +74,6 @@ public class MessageReceiver{
         } catch (JsonProcessingException e) {
             LOGGER.warn("error", e);
         }
-        return messageClass.getName() + ", " + messageClass.getCount() + ", " + error + "\n";
+        return messageClass.getName() + "," + messageClass.getCount() + "," + error + "\n";
     }
 }

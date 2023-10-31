@@ -61,7 +61,7 @@ public class MessageReceiver {
             }
         }catch (IOException e) {
             LOGGER.error("Error write", e.getMessage());
-
+            System.out.println("");
         }
     }
 

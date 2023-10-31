@@ -16,44 +16,44 @@ public class Producer {
     private TextMessage message;
     private Connection connection;
     private Session session;
+    private ActiveMQConnectionFactory factory;
+    private Destination destination;
 
     public Producer() {
         try {
-            ActiveMQConnectionFactory factory = Connector.activeMQConnectionFactory();
+            factory = new Connector().connectToQueue();
             connection = factory.createConnection();
             connection.start();
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
-            Destination destination = session.createQueue(this.queue);
-
+            destination = session.createQueue(this.queue);
             messageProducer = session.createProducer(destination);
             messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-
             message = session.createTextMessage();
-            LOGGER.info("Producer was started");
+            LOGGER.info("Producer start working");
         } catch (JMSException e) {
             LOGGER.error("Error of Producer", e);
         }
     }
 
-    public void send(String msg) {
+    public void sendMessage(String msg) {
         try {
             message.setText(msg);
             messageProducer.send(message);
         } catch (JMSException e) {
-            LOGGER.error("Message don't send", e);
+            LOGGER.error("Error sending message", e);
         }
     }
 
-    public boolean closeConectionProducer() {
+    public boolean closeConection() {
         try {
+            messageProducer.close();
             session.close();
             connection.close();
-            LOGGER.info("close connection producer");
-        } catch (JMSException e) {
-            LOGGER.error("error producer  stopped", e);
+            LOGGER.info("Closed producer connection");
             return true;
+        } catch (JMSException e) {
+            LOGGER.error("Error closing producer connection", e);
+            return false;
         }
-        return false;
     }
 }

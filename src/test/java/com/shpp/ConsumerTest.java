@@ -1,87 +1,86 @@
 package com.shpp;
 
 import com.shpp.consumer.Consumer;
-import com.shpp.producer.Producer;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-
+import org.mockito.Mockito;
 import javax.jms.*;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class ConsumerTest {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConsumerTest.class);
+public class ConsumerTest {
+    private Consumer consumer;
+    @Mock
+    private ActiveMQConnectionFactory factory;
     @Mock
     private Connection connection;
     @Mock
-    private Producer producer;
-    @Mock
     private Session session;
     @Mock
-    private Destination queue;
-
-    @Mock
     private MessageConsumer messageConsumer;
-
     @Mock
-    private ActiveMQConnectionFactory factory;
-
-    @Mock
-    Message message;
-    @Mock
-    TextMessage textMessage;
-    @Mock
-    Consumer consumer;
+    private TextMessage textMessage;
 
     @BeforeEach
-    void setUp() throws Exception {
-        MockitoAnnotations.openMocks(this);
+    public void setUp() {
+        consumer = new Consumer();
+
+        factory = mock(ActiveMQConnectionFactory.class);
+        connection = mock(Connection.class);
+        session = mock(Session.class);
+        messageConsumer = mock(MessageConsumer.class);
+        textMessage = mock(TextMessage.class);
+
+        consumer.factory = factory;
+        consumer.connection = connection;
+        consumer.session = session;
+        consumer.messageConsumer = messageConsumer;
     }
 
     @Test
-    void testRun() throws Exception {
-        String poisonPill = "poison_pill";
-        String queueName = "QueueMessages";
-        Destination queue = null;
-        when(messageConsumer.receive()).thenReturn(message);
+    public void testReceiveValidMessage() throws JMSException {
+        when(messageConsumer.receive()).thenReturn(textMessage);
+        when(textMessage.getText()).thenReturn("ValidMessage");
 
-        assertEquals(session.createQueue(queueName), (Queue) queue);
+        String receivedMessage = consumer.receiveMessage();
 
-        when(textMessage.getText()).
-                thenReturn("{\"name\":\"nameTest\",\"count\":10,\"createdAt\":\"2023\"}");
-        logger.info(textMessage.getText());
-        assertEquals(textMessage.getText(),
-                "{\"name\":\"nameTest\",\"count\":10,\"createdAt\":\"2023\"}");
-        assertNotEquals(textMessage.getText(),
-                "{\"name\":\"name\",\"count\":27,\"createdAt\":\"2023\"}");
-        when(consumer.receiveMessage()).thenReturn("test");
-        //assertEquals("test", consumer.receiveMessage());
-        when(consumer.receiveMessage()).thenReturn("poison_pill");
-        assertTrue("true", consumer.receiveMessage().equals(poisonPill));
-        when(consumer.receiveMessage()).thenReturn("test");
-
-
+        assertEquals("ValidMessage", receivedMessage);
     }
 
     @Test
-    void closeConnection() throws Exception {
+    public void testReceivePoisonPill() throws JMSException {
+        when(messageConsumer.receive()).thenReturn(textMessage);
+        when(textMessage.getText()).thenReturn("poisonPill");
 
-        assertFalse(consumer.closeConnection());
-        when(consumer.closeConnection()).thenReturn(true);
+        String receivedMessage = consumer.receiveMessage();
+
+        assertEquals(receivedMessage, null);
+    }
+
+    @Test
+    void testReceiveNonTextMessage() throws JMSException {
+        Message nonTextMessage = mock(Message.class);
+        when(messageConsumer.receive()).thenReturn(nonTextMessage);
+
+        String receivedMessage = consumer.receiveMessage();
+
+        assertNull(receivedMessage);
+    }
+
+    @Test
+    void testCloseConnectionSuccess() {
         assertTrue(consumer.closeConnection());
-        logger.info(consumer.closeConnection() + "");
-
-        // verify(consumer).closeConnection();
-
     }
 
-
+    @Test
+    void testCloseConnectionFailure() throws JMSException {
+        doThrow(new JMSException("Failed to close")).when(connection).close();
+        assertFalse(consumer.closeConnection());
+    }
 }
+
+
+
+

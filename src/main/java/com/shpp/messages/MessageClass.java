@@ -4,11 +4,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.shpp.eddr.EddrConstraint;
 import jakarta.validation.constraints.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-public class MessageClass {//implements Serializable
+public class MessageClass {
     @NotNull
     @Size(min = 7,message ="name length should be >= 7")
     @Pattern(regexp = ".*[aAaA].*", message = "name must contain the character 'a'")
@@ -19,13 +18,13 @@ public class MessageClass {//implements Serializable
     @Min(value = 10,message ="count should be >= 10")
     private int count;
     @JsonDeserialize
-    private LocalDateTime dateTime;
+    private LocalDateTime createdAt;
 
     public MessageClass(String name, String eddr, int count, LocalDateTime dateTime) {
         this.name = name;
         this.eddr = eddr;
         this.count = count;
-        this.dateTime = dateTime;
+        this.createdAt = dateTime;
     }
 
     public MessageClass() {
@@ -55,12 +54,12 @@ public class MessageClass {//implements Serializable
         this.count = count;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
@@ -69,7 +68,7 @@ public class MessageClass {//implements Serializable
                 "name='" + name + '\'' +
                 ", eddr='" + eddr + '\'' +
                 ", count=" + count +
-                ", dateTime=" + dateTime +
+                ", dateTime=" + createdAt +
                 '}';
     }
 }

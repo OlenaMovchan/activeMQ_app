@@ -1,4 +1,5 @@
 package com.shpp.consumer;
+
 import javax.jms.*;
 
 import com.shpp.Connector;
@@ -8,18 +9,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Consumer {
-
-    private final LoadingProperties properties = new LoadingProperties();
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);
-    private String poisonPill = properties.getProperty("poison");
-    private String queue =properties.getProperty("queue");
+    private LoadingProperties properties = new LoadingProperties();
+
+    private String poisonPill = properties.getProperty("poisonPill");
+    private String queue = properties.getProperty("queue");
     private Connection connection;
     private Session session;
-    private  MessageConsumer messageConsumer;
-    private  Destination destination;
-    private  ActiveMQConnectionFactory factory;
+    private MessageConsumer messageConsumer;
+    private Destination destination;
+    private ActiveMQConnectionFactory factory;
 
-    public Consumer() throws Exception {
+    public Consumer() {
         try {
             factory = Connector.activeMQConnectionFactory();
             connection = factory.createConnection();
@@ -27,38 +28,39 @@ public class Consumer {
             session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             destination = session.createQueue(queue);
             messageConsumer = session.createConsumer(destination);
-            LOGGER.debug("Consumer was started");
+            LOGGER.info("Consumer start working");
         } catch (JMSException e) {
-            LOGGER.error("Error of Consumer", e);
-            throw new Exception(e);
+            LOGGER.error("Error connect consumer", e);
         }
     }
 
-    public String receiveMessage() throws Exception {
-        Message message = messageConsumer.receive();
-        if (message instanceof TextMessage) {
-            TextMessage textMessage = (TextMessage) message;
-            if (((TextMessage) message).getText().equals(poisonPill)) {
-                LOGGER.warn("Received poisonPill");
-                return null;
+    public String receiveMessage() {
+        try {
+            Message message = messageConsumer.receive();
+            if (message instanceof TextMessage) {
+                TextMessage textMessage = (TextMessage) message;
+                if (((TextMessage) message).getText().equals(poisonPill)) {
+                    LOGGER.info("Received poisonPill");
+                    return null;
+                }
+                return textMessage.getText();
             }
-            return textMessage.getText();
+        } catch (JMSException e) {
+            LOGGER.error("JMSException", e.getMessage());
         }
         return null;
     }
 
-    public boolean closeConnection() throws Exception {
-
+    public boolean closeConnection() {
         try {
             messageConsumer.close();
             session.close();
             connection.close();
             LOGGER.info("Closed consumer connection");
         } catch (Exception e) {
-            LOGGER.info("Closed consumer not connection");
+            LOGGER.info("Error closing consumer connection");
             return true;
         }
         return false;
     }
-
 }

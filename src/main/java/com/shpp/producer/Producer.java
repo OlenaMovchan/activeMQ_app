@@ -4,7 +4,6 @@ import javax.jms.*;
 
 import com.shpp.Connector;
 import com.shpp.LoadingProperties;
-import com.shpp.Connector;
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,7 @@ public class Producer {
     private Connection connection;
     private Session session;
 
-    public Producer() throws Exception {
+    public Producer() {
         try {
             ActiveMQConnectionFactory factory = Connector.activeMQConnectionFactory();
             connection = factory.createConnection();
@@ -31,12 +30,10 @@ public class Producer {
             messageProducer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
             message = session.createTextMessage();
-            LOGGER.debug("Producer was started");
+            LOGGER.info("Producer was started");
         } catch (JMSException e) {
             LOGGER.error("Error of Producer", e);
-            throw new Exception(e);
         }
-        LOGGER.info("Producer was started");
     }
 
     public void send(String msg) {

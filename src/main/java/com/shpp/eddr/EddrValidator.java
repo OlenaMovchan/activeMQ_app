@@ -1,7 +1,8 @@
 package com.shpp.eddr;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class EddrValidator implements ConstraintValidator<EddrConstraint, String> {
     @Override

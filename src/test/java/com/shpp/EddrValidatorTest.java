@@ -1,11 +1,12 @@
 package com.shpp;
 
 import com.shpp.eddr.EddrValidator;
+import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import javax.validation.ConstraintValidatorContext;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 

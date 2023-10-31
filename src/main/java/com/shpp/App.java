@@ -8,6 +8,8 @@ import com.shpp.producer.ProducerTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -50,7 +52,6 @@ public class App {
         }
         executor.shutdownNow();
         long tP = (System.currentTimeMillis() - startProd) / 1000;
-        LOGGER.info("timeProducer " + tP);
         double rps = numOfMessages / ((System.currentTimeMillis() - startProd) / 1000);
 
         double rpsCon = numOfMessages / ((System.currentTimeMillis() - startConsumer) / 1000);
@@ -60,7 +61,9 @@ public class App {
 
         LOGGER.info("timeConsumer " + (System.currentTimeMillis() - startConsumer) / 1000);
         LOGGER.info("rps Consumer NEW >>> = " + rpsCon);
-
+        LocalDateTime localDateTime = LocalDateTime.now();
+        String format = localDateTime.format(DateTimeFormatter.ofPattern("yyyy:MM-dd HH|mm/ss.ms"));
+        System.out.println(format);
     }
 }
 

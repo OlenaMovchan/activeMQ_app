@@ -61,13 +61,14 @@ public class MessageReceiver {
             }
         }catch (IOException e) {
             LOGGER.error("Error write", e.getMessage());
+            LOGGER.info("");
         }
     }
 
     public String stringIncorrect(MessageClass messageClass, Set<ConstraintViolation<MessageClass>> errors) {
         ObjectMapper mapper = new JsonMapper();
         String error = "";
-        try {// {“errors”:[]}
+        try {
             error = mapper.writeValueAsString("{errors:["
                     + errors.stream().map(e -> e.getMessage())
                     .reduce((field1, field2) -> field1 + ", " + field2).orElse("") + "]}");

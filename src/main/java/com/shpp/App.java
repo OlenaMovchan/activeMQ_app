@@ -22,10 +22,10 @@ public class App {
         String n = System.getProperty("n", "100000");
         LOGGER.info("Number of messages: " + n);
         int numOfMessages = Integer.parseInt(n);
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS+NUM_CONSUMERS);
-LOGGER.info(">>>>>");
-LOGGER.info(">>>>>");
-        GeneratorMessages generator = new GeneratorMessages();
+        ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
+        LOGGER.info(">>>>>");
+        LOGGER.info(">>>>>");
+        GeneratorMessages generator = new GeneratorMessages(NUM_PRODUCERS);
 
         long startProd = System.currentTimeMillis();
 

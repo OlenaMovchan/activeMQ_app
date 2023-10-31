@@ -41,3 +41,7 @@ D
 src/assembly/zip.xml,4\4\442721b68096c1d6d97c5e6b07abc24ac8a1d0d4
 U
 %src/main/java/com/shpp/Converter.java,f\b\fb734e580e6899064199e2a1e6fc62cad6e67856
+=
+incorrect.csv,d\4\d4e7e422b85cd4cd3111f5e7d957ef4f8319a685
+9
+	valid.csv,e\b\eb26b65d42b1904a88cc20f6c4fd7d89b1ccccfb

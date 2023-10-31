@@ -33,7 +33,7 @@ class GeneratorMessagesTest {
     LocalDateTime periodEnd = LocalDateTime.now();
     MessageClass messageClass = new MessageClass();
 
-    GeneratorMessages generatorMessages = new GeneratorMessages();
+    GeneratorMessages generatorMessages = new GeneratorMessages(2);
 
     @Test
     void randomName() {

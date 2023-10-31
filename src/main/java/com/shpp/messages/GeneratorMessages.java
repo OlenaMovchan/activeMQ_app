@@ -3,7 +3,6 @@ package com.shpp.messages;
 import com.shpp.Converter;
 import com.shpp.LoadingProperties;
 import com.shpp.producer.Producer;
-import com.shpp.Converter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,14 +15,16 @@ public class GeneratorMessages {
     private Logger LOGGER = LoggerFactory.getLogger(GeneratorMessages.class);
     private LoadingProperties properties = new LoadingProperties();
 
-    private String poisonPill = properties.getProperty("poison");
+    private String poisonPill = properties.getProperty("poisonPill");
 
     private String limitSeconds = properties.getProperty("limitSeconds");
 
     private AtomicInteger countSentMessages = new AtomicInteger(0);
     private Random random = new Random();
+    private int countProducers;
 
-    public GeneratorMessages() {
+    public GeneratorMessages(int countProducers) {
+        this.countProducers = countProducers;
     }
 
     public String generateRandomName(int length) {
@@ -60,9 +61,9 @@ public class GeneratorMessages {
                         generateRandomEddr(13),
                         generateRandomCount(),
                         generateRandomDate()))
-                .limit(maxN).takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds)*1000+ startTime))
+                .limit(maxN).takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds)*1000/countProducers+ startTime))
                 .forEach(message -> {
-                    producer.send(Converter.toJson(message));
+                    producer.send(Converter.toJsonObject(message));
                     countSentMessages.getAndIncrement();
                 });
         long elapsedTime = System.currentTimeMillis() - startTime;

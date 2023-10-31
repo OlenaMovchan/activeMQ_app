@@ -8,15 +8,14 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
-public class MessageClass implements Serializable {
+public class MessageClass {//implements Serializable
     @NotNull
     @Size(min = 7,message ="name length should be >= 7")
     @Pattern(regexp = ".*[aAaA].*", message = "name must contain the character 'a'")
     private String name;
-    @Size(min = 13, max = 14, message = "eddr length should be 13 or 14")
+    @Size(min = 13, max = 14, message = "the number of eddr digits should be 13 or 14")
     @EddrConstraint
     private String eddr;
-
     @Min(value = 10,message ="count should be >= 10")
     private int count;
     @JsonDeserialize
@@ -30,7 +29,6 @@ public class MessageClass implements Serializable {
     }
 
     public MessageClass() {
-
     }
 
     public String getName() {

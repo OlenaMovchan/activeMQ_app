@@ -1,12 +1,16 @@
 package com.shpp.consumer;
 
-import javax.jms.*;
+
 
 import com.shpp.Connector;
 import com.shpp.LoadingProperties;
+
 import org.apache.activemq.ActiveMQConnectionFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.jms.*;
 
 public class Consumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Consumer.class);

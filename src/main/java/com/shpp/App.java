@@ -24,42 +24,42 @@ public class App {
         String n = System.getProperty("n", "100000");
         LOGGER.info("Number of messages: " + n);
         int numOfMessages = Integer.parseInt(n);
-        //ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
+        ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
         GeneratorMessages generator = new GeneratorMessages();
         long startProd = System.currentTimeMillis();
 
         Producer producer = new Producer();
-        generator.generateMessages(producer, numOfMessages);
-        //int maxN = numOfMessages;
-        //Runnable producerTask = new ProducerTask(producer, maxN, generator);
-        //executor.execute(producerTask);
+
+        int maxN = numOfMessages;
+        Runnable producerTask = new ProducerTask(producer, maxN, generator);
+        executor.execute(producerTask);
 
         long startConsumer = System.currentTimeMillis();
 
         MessageReceiver receiver = new MessageReceiver();
-        receiver.receivesMessage();
-        //Runnable consumerTask = new ConsumerTask(receiver);
-        //executor.execute(consumerTask);
 
-        //executor.shutdown();
-//        while (!executor.isTerminated()) {
-//            try {
-//                Thread.sleep(500);
-//            } catch (InterruptedException e) {
-//                LOGGER.error("Error");
-//            }
-//        }
-       // executor.shutdownNow();
-        long tP = (System.currentTimeMillis() - startProd) / 1000;
+        Runnable consumerTask = new ConsumerTask(receiver);
+        executor.execute(consumerTask);
+
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                LOGGER.error("Error interrupted", e.getMessage());
+            }
+        }
+        executor.shutdownNow();
+        long timeProducer = (System.currentTimeMillis() - startProd) / 1000;
         double rps = numOfMessages / ((System.currentTimeMillis() - startProd) / 1000);
 
         double rpsCon = numOfMessages / ((System.currentTimeMillis() - startConsumer) / 1000);
 
-        LOGGER.info("timeProducer " + tP);
-        LOGGER.info("rps producer NEW >>> = " + rps);
+        LOGGER.info("timeProducer " + timeProducer);
+        LOGGER.info("rps producer  = " + rps);
 
         LOGGER.info("timeConsumer " + (System.currentTimeMillis() - startConsumer) / 1000);
-        LOGGER.info("rps Consumer NEW >>> = " + rpsCon);
+        LOGGER.info("rps Consumer  = " + rpsCon);
     }
 }
 

@@ -12,11 +12,11 @@ public class Producer {
     private static final Logger LOGGER = LoggerFactory.getLogger(Producer.class);
     private LoadingProperties properties = new LoadingProperties();
     private String queue = properties.getProperty("queue");
-    private MessageProducer messageProducer;
-    private TextMessage message;
-    private Connection connection;
-    private Session session;
-    private ActiveMQConnectionFactory factory;
+    public MessageProducer messageProducer;
+    public TextMessage message;
+    public Connection connection;
+    public Session session;
+    public ActiveMQConnectionFactory factory;
     private Destination destination;
 
     public Producer() {

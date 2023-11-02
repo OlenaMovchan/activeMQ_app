@@ -37,7 +37,6 @@ public class EddrValidator implements ConstraintValidator<EddrConstraint, String
                 checksum += digits[i] * (numbers[2]);
             }
             index++;
-
             if (index == 3) {
                 index = 0;
             }

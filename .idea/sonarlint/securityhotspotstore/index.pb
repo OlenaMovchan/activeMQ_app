@@ -10,8 +10,6 @@ O
 a
 1src/test/java/com/shpp/GeneratorMessagesTest.java,6\0\60f8eb3a4eb1b577ffdabe6ec16fb6009a5185fc
 X
-(src/test/java/com/shpp/ServicesTest.java,5\1\5148558fc52a076b2afaae93cea5bbacde956234
-X
 (src/test/java/com/shpp/ProducerTest.java,f\f\ff6a7dffd4a4f3509c9b6acb28fecbec5249e0ac
 a
 1src/main/java/com/shpp/producer/ProducerTask.java,f\9\f91b86f8bed2352c63ea47cda3a403c582035c1b
@@ -31,10 +29,6 @@ _
 .src/main/java/com/shpp/eddr/EddrValidator.java,b\a\ba05db69fab8516e0e0eab03ecf3e1d8c654d418
 ]
 -src/main/java/com/shpp/producer/Producer.java,2\1\2179f01c85d9c0d471a62f4e2bc9b781fc34b17d
-]
--src/test/java/com/shpp/MessagesClassTest.java,6\9\697228faa27a74cd591ceaca0059902e688a42f4
-S
-#src/test/java/com/shpp/AppTest.java,7\6\761718a20c131fa4096760f7f331de9567458d7d
 X
 (src/test/java/com/shpp/ConsumerTest.java,6\7\673f3b5c47725dca4edaf6229c9c9a1d3610f0a0
 D
@@ -45,3 +39,17 @@ U
 incorrect.csv,d\4\d4e7e422b85cd4cd3111f5e7d957ef4f8319a685
 9
 	valid.csv,e\b\eb26b65d42b1904a88cc20f6c4fd7d89b1ccccfb
+\
+,src/test/java/com/shpp/ProducerTaskTest.java,b\5\b5bad9cec75a6adaf4076eb1cdf9d0a6c907f911
+\
+,src/test/java/com/shpp/MessageClassTest.java,0\f\0f0c8f3a4f63359f6403b46528a4e43859ed2474
+Y
+)src/test/java/com/shpp/ConnectorTest.java,7\d\7db84163e16d3e46d940b8b14d727a76b80d7f2a
+\
+,src/test/java/com/shpp/ConsumerTaskTest.java,8\2\82c0ce7dcd5925bc1996e02eae0be1d7937aad3f
+Y
+)src/test/java/com/shpp/ConverterTest.java,7\1\7188c92970edc4edec19ed06b96cc276874d8fea
+]
+-src/test/java/com/shpp/EddrValidatorTest.java,3\b\3b8d5bcef8e9707edd8c4b7b8208a2b015d165aa
+_
+/src/test/java/com/shpp/MessageReceiverTest.java,6\f\6fd7d553534fcb12d6e997abc67d4819bc7aeed8

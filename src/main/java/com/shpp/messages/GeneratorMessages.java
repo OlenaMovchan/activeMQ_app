@@ -8,7 +8,10 @@ import org.slf4j.LoggerFactory;
 
 import java.time.*;
 import java.util.Random;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.LongStream;
 import java.util.stream.Stream;
 
 public class GeneratorMessages {
@@ -18,10 +21,9 @@ public class GeneratorMessages {
     private String limitSeconds = properties.getProperty("limitSeconds");
     private AtomicInteger countSentMessages = new AtomicInteger(0);
     private Random random = new Random();
-    private int countProducers;
 
-    public GeneratorMessages(int countProducers) {
-        this.countProducers = countProducers;
+    public GeneratorMessages() {
+
     }
 
     public String generateRandomName(int length) {
@@ -55,16 +57,18 @@ public class GeneratorMessages {
         long startTime = System.currentTimeMillis();
 
         Stream.generate(() -> new MessageClass(generateRandomName(random.nextInt(13)),
-                        generateRandomEddr(13),
-                        generateRandomCount(),
+                        generateRandomEddr(13), generateRandomCount(),
                         generateRandomDate()))
-                .limit(maxN).takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds)*1000/countProducers+ startTime))
+                .limit(maxN)
+                .takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds) * 1000 + startTime))
                 .forEach(message -> {
                     producer.sendMessage(Converter.serialize(message));
                     countSentMessages.getAndIncrement();
                 });
+
         long elapsedTime = System.currentTimeMillis() - startTime;
         producer.sendMessage(poisonPill);
+        LOGGER.info("Send poisonPill");
         LOGGER.info("Total messages sent: " + countSentMessages.get());
         double sendingSpeed = countSentMessages.get() / (elapsedTime / 1000.0);
         LOGGER.info("Sending speed: " + sendingSpeed + " messages per second");
@@ -72,6 +76,31 @@ public class GeneratorMessages {
 
     }
 }
+// //ForkJoinPool pool = new ForkJoinPool(4);
+//        ForkJoinTask<Stream<MessageClass>> task = pool.submit(() -> Stream.generate(() -> new MessageClass(generateRandomName(random.nextInt(13),
+//                generateRandomEddr(13), generateRandomCount(),
+//                generateRandomDate()))
+//                .limit(maxN)
+//                .takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds) * 1000 / countProducers + startTime))
+//                .parallel() // Add parallel() here to parallelize the stream
+//                .forEach(message -> {
+//                    producer.sendMessage(Converter.serialize(message));
+//                    countSentMessages.getAndIncrement();
+//                });
+//
+//// Wait for the task to complete
+//        Stream<MessageClass> generatedMessages = task.join();
+
+//        Stream.generate(() -> new MessageClass(generateRandomName(random.nextInt(13)),
+//                        generateRandomEddr(13),
+//                        generateRandomCount(),
+//                        generateRandomDate()))
+//                .limit(maxN).takeWhile(p -> System.currentTimeMillis() < (Long.parseLong(limitSeconds)*1000/countProducers+ startTime))
+//                .forEach(message -> {
+//                    producer.sendMessage(Converter.serialize(message));
+//                    countSentMessages.getAndIncrement();
+//                });
+
 //int numberOfThreads = Runtime.getRuntime().availableProcessors(); // Number of available processors
 //
 //    ExecutorService executorService = Executors.newFixedThreadPool(numberOfThreads);

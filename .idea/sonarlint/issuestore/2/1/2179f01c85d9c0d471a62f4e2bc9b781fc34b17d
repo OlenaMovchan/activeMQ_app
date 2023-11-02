@@ -1,0 +1,11 @@
+
+x
+java:S1104"[Make messageProducer a static final constant or non-public and provide accessors if needed.(ÕÛÄŸ8²¬÷¼¸1
+u
+java:S1104"SMake message a static final constant or non-public and provide accessors if needed.(õø”ıÿÿÿÿ8ôö¼¸1
+x
+java:S1104"VMake connection a static final constant or non-public and provide accessors if needed.(à¯ôüÿÿÿÿ8±Ø÷¼¸1
+u
+java:S1104"SMake session a static final constant or non-public and provide accessors if needed.(áÿ“ƒıÿÿÿÿ8úÃ÷¼¸1
+p
+java:S1104"SMake factory a static final constant or non-public and provide accessors if needed.(ßû€Ô8Êì÷¼¸1

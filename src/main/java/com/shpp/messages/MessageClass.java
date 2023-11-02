@@ -6,7 +6,8 @@ import jakarta.validation.constraints.*;
 
 import java.time.LocalDateTime;
 
-
+//@AllArgsConstructor  lombok
+//@Getter
 public class MessageClass {
     @NotNull
     @Size(min = 7,message ="name length should be >= 7")

@@ -6,6 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
+
 import javax.jms.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -25,14 +27,8 @@ public class ConsumerTest {
 
     @BeforeEach
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
         consumer = new Consumer();
-
-        factory = mock(ActiveMQConnectionFactory.class);
-        connection = mock(Connection.class);
-        session = mock(Session.class);
-        messageConsumer = mock(MessageConsumer.class);
-        textMessage = mock(TextMessage.class);
-
         consumer.factory = factory;
         consumer.connection = connection;
         consumer.session = session;
@@ -56,11 +52,11 @@ public class ConsumerTest {
 
         String receivedMessage = consumer.receiveMessage();
 
-        assertEquals(receivedMessage, null);
+        assertEquals(null, receivedMessage);
     }
 
     @Test
-    void testReceiveNonTextMessage() throws JMSException {
+    public void testReceiveNonTextMessage() throws JMSException {
         Message nonTextMessage = mock(Message.class);
         when(messageConsumer.receive()).thenReturn(nonTextMessage);
 
@@ -70,12 +66,12 @@ public class ConsumerTest {
     }
 
     @Test
-    void testCloseConnectionSuccess() {
+    public void testCloseConnectionSuccess() {
         assertTrue(consumer.closeConnection());
     }
 
     @Test
-    void testCloseConnectionFailure() throws JMSException {
+    public void testCloseConnectionFailure() throws JMSException {
         doThrow(new JMSException("Failed to close")).when(connection).close();
         assertFalse(consumer.closeConnection());
     }

@@ -27,12 +27,12 @@ public class GeneratorMessages {
     }
 
     public String generateRandomName(int length) {
-            String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < length; i++) {
-                sb.append(characters.charAt(random.nextInt(characters.length())));
-            }
-            return sb.toString();
+        String characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            sb.append(characters.charAt(random.nextInt(characters.length())));
+        }
+        return sb.toString();
     }
 
     public String generateRandomEddr(int length) {
@@ -74,7 +74,7 @@ public class GeneratorMessages {
         double sendingSpeed = countSentMessages.get() / (elapsedTime / 1000.0);
         LOGGER.info("Sending speed: " + sendingSpeed + " messages per second");
         producer.closeConection();
-
+        LOGGER.info("End of message generation");
     }
 }
 // //ForkJoinPool pool = new ForkJoinPool(4);

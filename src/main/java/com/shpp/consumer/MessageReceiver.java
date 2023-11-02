@@ -51,9 +51,9 @@ public class MessageReceiver {
                     break;
                 }
                 message = Converter.deserialize(messageReceived);
-                if (countReceiveMessages.get() % 10000 == 0) {
-                    LOGGER.info("Messege receive " + message.toString());
-                }
+//                if (countReceiveMessages.get() % 10000 == 0) {
+//                    LOGGER.info("Messege receive " + message.toString());
+//                }
                 countReceiveMessages.incrementAndGet();
                 errors = validator.validate(message);
                 if (errors.isEmpty()) {

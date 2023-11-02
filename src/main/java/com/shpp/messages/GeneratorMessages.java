@@ -53,7 +53,7 @@ public class GeneratorMessages {
     }
 
     public void generateMessages(Producer producer, Integer maxN) {
-        LOGGER.info("Generate messages");
+        LOGGER.info("Start of message generation");
         LOGGER.info("Limit seconds " + limitSeconds);
         long startTime = System.currentTimeMillis();
 

@@ -24,7 +24,7 @@ public class ConverterTest {
 
     @Test
     public void testDeserialize() {
-        String json = "{\"name\":\"TestName\",\"eddr\":\"1234567890123\",\"count\":42,\"createdAt\":\"2023-11-01T14:30:45\"}";
+        String json = "{\"name\":\"TestName\",\"eddr\":\"1234567890123\",\"count\":42,\"createdAt\":\"2023-11-02T14:30:45\"}";
         MessageClass message = Converter.deserialize(json);
         assertNotNull(message);
         assertEquals("TestName", message.getName());

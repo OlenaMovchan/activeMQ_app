@@ -34,13 +34,13 @@ public class GeneratorMessagesTest {
             .withNano(0);
     MessageClass messageClass = new MessageClass();
 
-    GeneratorMessages generatorMessages = new GeneratorMessages(2);
+    GeneratorMessages generatorMessages = new GeneratorMessages();
 
     @Test
     public void generateRandomNameTest() {
         MessageClass messageClass = new MessageClass();
         messageClass.setName("Www");
-        GeneratorMessages generatorMessages = new GeneratorMessages(2);
+        GeneratorMessages generatorMessages = new GeneratorMessages();
         assertNotEquals(messageClass.getName(), generatorMessages.generateRandomName(7));
     }
 

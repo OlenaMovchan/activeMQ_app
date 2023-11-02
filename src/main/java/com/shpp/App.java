@@ -24,30 +24,32 @@ public class App {
         String n = System.getProperty("n", "100000");
         LOGGER.info("Number of messages: " + n);
         int numOfMessages = Integer.parseInt(n);
-        ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
+        //ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
         GeneratorMessages generator = new GeneratorMessages();
         long startProd = System.currentTimeMillis();
 
         Producer producer = new Producer();
-        int maxN = numOfMessages;
-        Runnable producerTask = new ProducerTask(producer, maxN, generator);
-        executor.execute(producerTask);
+        generator.generateMessages(producer, numOfMessages);
+        //int maxN = numOfMessages;
+        //Runnable producerTask = new ProducerTask(producer, maxN, generator);
+        //executor.execute(producerTask);
 
         long startConsumer = System.currentTimeMillis();
 
         MessageReceiver receiver = new MessageReceiver();
-        Runnable consumerTask = new ConsumerTask(receiver);
-        executor.execute(consumerTask);
+        receiver.receivesMessage();
+        //Runnable consumerTask = new ConsumerTask(receiver);
+        //executor.execute(consumerTask);
 
-        executor.shutdown();
-        while (!executor.isTerminated()) {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                LOGGER.error("Error");
-            }
-        }
-        executor.shutdownNow();
+        //executor.shutdown();
+//        while (!executor.isTerminated()) {
+//            try {
+//                Thread.sleep(500);
+//            } catch (InterruptedException e) {
+//                LOGGER.error("Error");
+//            }
+//        }
+       // executor.shutdownNow();
         long tP = (System.currentTimeMillis() - startProd) / 1000;
         double rps = numOfMessages / ((System.currentTimeMillis() - startProd) / 1000);
 
@@ -58,17 +60,7 @@ public class App {
 
         LOGGER.info("timeConsumer " + (System.currentTimeMillis() - startConsumer) / 1000);
         LOGGER.info("rps Consumer NEW >>> = " + rpsCon);
-        LocalDateTime localDateTime = LocalDateTime.now();
-        String format = localDateTime.format(DateTimeFormatter.ofPattern("yyyy:MM-dd HH|mm/ss.ms"));
-        System.out.println(format);
     }
 }
-// Instant before = Instant.now();
-//        total = IntStream.of(3, 1, 4, 1, 5, 9)
-//                .parallel()
-//                .map(ParallelDemo::doubleIt)
-//                .sum();
-//        Instant after = Instant.now();
-//        Duration duration = Duration.between(before, after);
-//        System.out.println("Total of doubles = " + total);
-//        System.out.println("time = " + duration.toMillis() + " ms");
+
+

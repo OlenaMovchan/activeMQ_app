@@ -35,23 +35,27 @@ public class MessageReceiver {
 
         try (FileWriter valid = new FileWriter(validFile);
              FileWriter incorrect = new FileWriter(incorrectFile)) {
-        MessageClass message;
-        Consumer consumer = new Consumer();
-        long startTime = System.currentTimeMillis();
+            MessageClass message;
+            Consumer consumer = new Consumer();
+            long startTime = System.currentTimeMillis();
 
-        while (true) {
-            String messageReceived = consumer.receiveMessage();
-            if (messageReceived == null) {
-                long elapsedTime = System.currentTimeMillis() - startTime;
-                double receivingngSpeed = countReceiveMessages.get() / (elapsedTime / 1000.0);
-                LOGGER.info("Total messages received   " + countReceiveMessages.get());
-                LOGGER.info("Receive speed: " + receivingngSpeed + " messages per second");
-                consumer.closeConnection();
-                break;
-            }
-            message = Converter.deserialize(messageReceived);
-            countReceiveMessages.incrementAndGet();
-            errors = validator.validate(message);
+            while (true) {
+                String messageReceived = consumer.receiveMessage();
+
+                if (messageReceived == null) {
+                    long elapsedTime = System.currentTimeMillis() - startTime;
+                    double receivingngSpeed = countReceiveMessages.get() / (elapsedTime / 1000.0);
+                    LOGGER.info("Total messages received   " + countReceiveMessages.get());
+                    LOGGER.info("Receive speed: " + receivingngSpeed + " messages per second");
+                    consumer.closeConnection();
+                    break;
+                }
+                message = Converter.deserialize(messageReceived);
+                if (countReceiveMessages.get() % 10000 == 0) {
+                    LOGGER.info("Messege receive " + message.toString());
+                }
+                countReceiveMessages.incrementAndGet();
+                errors = validator.validate(message);
                 if (errors.isEmpty()) {
                     valid.write(message.getName() + "," + message.getCount() + "\n");
                     valid.flush();
@@ -60,7 +64,7 @@ public class MessageReceiver {
                     incorrect.flush();
                 }
             }
-        }catch (IOException e) {
+        } catch (IOException e) {
             LOGGER.error("Error write", e.getMessage());
         }
     }

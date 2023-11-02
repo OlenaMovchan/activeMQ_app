@@ -24,8 +24,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MessageReceiver {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageReceiver.class);
-    private LoadingProperties properties = new LoadingProperties();
-    private String poisonPill = properties.getProperty("poisonPill");
     private AtomicInteger countReceiveMessages = new AtomicInteger(0);
     private String validFile = "valid.csv";
     private String incorrectFile = "incorrect.csv";
@@ -43,7 +41,7 @@ public class MessageReceiver {
 
         while (true) {
             String messageReceived = consumer.receiveMessage();
-            if (messageReceived == null || messageReceived.equals(poisonPill)) {
+            if (messageReceived == null) {
                 long elapsedTime = System.currentTimeMillis() - startTime;
                 double receivingngSpeed = countReceiveMessages.get() / (elapsedTime / 1000.0);
                 LOGGER.info("Total messages received   " + countReceiveMessages.get());
@@ -64,7 +62,6 @@ public class MessageReceiver {
             }
         }catch (IOException e) {
             LOGGER.error("Error write", e.getMessage());
-            System.out.println("");
         }
     }
 

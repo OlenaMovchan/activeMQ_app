@@ -15,25 +15,25 @@ public class EddrValidatorTest {
     private ConstraintValidatorContext context;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         validator = new EddrValidator();
         context = Mockito.mock(ConstraintValidatorContext.class);
     }
 
     @Test
-    void testValidEddr() {
+    public void testValidEddr() {
         String validEddr = "1234567890123";
         assertTrue(validator.isValid(validEddr, context));
     }
 
     @Test
-    void testIncorrectEddr() {
+    public void testIncorrectEddr() {
         String invalidEddr = "1234567890124";
         assertFalse(validator.isValid(invalidEddr, context));
     }
 
     @Test
-    void testNullEddr() {
+    public void testNullEddr() {
         String nullEddr = null;
         assertFalse(validator.isValid(nullEddr, context));
     }

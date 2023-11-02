@@ -6,15 +6,15 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class ConverterTest {
-    LocalDateTime now = LocalDateTime.now();
+    private LocalDateTime now = LocalDateTime.now();
 
-    LocalDateTime specificTime = now
+    private LocalDateTime specificTime = now
             .withHour(14)
             .withMinute(30)
             .withSecond(45)
             .withNano(0);
     @Test
-    void testSerialize() {
+    public void testSerialize() {
         MessageClass message = new MessageClass("TestName", "1234567890123", 42, specificTime);
         System.out.println(specificTime);
         String json = Converter.serialize(message);
@@ -23,8 +23,8 @@ public class ConverterTest {
     }
 
     @Test
-    void testDeserialize() {
-        String json = "{\"name\":\"TestName\",\"eddr\":\"1234567890123\",\"count\":42,\"createdAt\":\"2023-10-31T14:30:45\"}";
+    public void testDeserialize() {
+        String json = "{\"name\":\"TestName\",\"eddr\":\"1234567890123\",\"count\":42,\"createdAt\":\"2023-11-01T14:30:45\"}";
         MessageClass message = Converter.deserialize(json);
         assertNotNull(message);
         assertEquals("TestName", message.getName());

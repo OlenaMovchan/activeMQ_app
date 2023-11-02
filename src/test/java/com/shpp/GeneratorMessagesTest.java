@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class GeneratorMessagesTest {
+public class GeneratorMessagesTest {
 
     LocalDateTime now = LocalDateTime.now();
 
@@ -37,7 +37,7 @@ class GeneratorMessagesTest {
     GeneratorMessages generatorMessages = new GeneratorMessages(2);
 
     @Test
-    void generateRandomNameTest() {
+    public void generateRandomNameTest() {
         MessageClass messageClass = new MessageClass();
         messageClass.setName("Www");
         GeneratorMessages generatorMessages = new GeneratorMessages(2);
@@ -45,21 +45,30 @@ class GeneratorMessagesTest {
     }
 
     @Test
-    void generateRandomDateTest() {
+    public void generateRandomDateTest() {
         messageClass.setCreatedAt(specificTime);
         assertNotEquals(generatorMessages.generateRandomDate(), messageClass.getCreatedAt());
     }
 
     @Test
-    void generateRandomCountTest() {
+    public void generateRandomCountTest() {
         messageClass.setCount(10);
         assertNotEquals(generatorMessages.generateRandomCount(), messageClass.getCount());
     }
 
     @Test
-    void sendMessageTest() {
+    public void sendMessageTest() {
         Producer producer = mock(Producer.class);
         producer.sendMessage("test");
         verify(producer, times(1)).sendMessage("test");
     }
+
+//    @Test
+//    void testGenerateMessages() {
+//        Producer producer = mock(Producer.class);
+//        GeneratorMessages generator = new GeneratorMessages(2);
+//        //when(generator.getCurrentTimeMillis()).thenReturn(0L);
+//        generator.generateMessages(producer, 10);
+//        verify(producer, times(10)).sendMessage(anyString());
+//    }
 }

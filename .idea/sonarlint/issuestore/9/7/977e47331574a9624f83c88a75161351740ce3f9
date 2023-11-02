@@ -1,5 +1,3 @@
 
-W
-java:S1118":Add a private constructor to hide the implicit public one.(Ø§ğÑ8Éš¶‡¸1
 Ñ
-java:S5301"®Secure this "ActiveMQConnectionFactory" by whitelisting the trusted packages using the "setTrustedPackages" method and make sure the "setTrustAllPackages" is not set to true.(äø¡óûÿÿÿÿ8Ğš¶‡¸1
+java:S5301"®Secure this "ActiveMQConnectionFactory" by whitelisting the trusted packages using the "setTrustedPackages" method and make sure the "setTrustAllPackages" is not set to true.(äø¡óûÿÿÿÿ8ÃóÀª¸1

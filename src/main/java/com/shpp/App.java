@@ -17,31 +17,28 @@ import java.util.concurrent.Executors;
 public class App {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
-    private static final int NUM_PRODUCERS = 2;
-    private static final int NUM_CONSUMERS = 2;
+    private static final int NUM_PRODUCERS = 1;
+    private static final int NUM_CONSUMERS = 1;
 
     public static void main(String[] args) {
         String n = System.getProperty("n", "100000");
         LOGGER.info("Number of messages: " + n);
         int numOfMessages = Integer.parseInt(n);
         ExecutorService executor = Executors.newFixedThreadPool(NUM_PRODUCERS + NUM_CONSUMERS);
-        GeneratorMessages generator = new GeneratorMessages(NUM_PRODUCERS);
+        GeneratorMessages generator = new GeneratorMessages();
         long startProd = System.currentTimeMillis();
 
-        for (int i = 0; i < NUM_PRODUCERS; i++) {
-            Producer producer = new Producer();
-            int maxN = numOfMessages / NUM_PRODUCERS;
-            Runnable producerTask = new ProducerTask(producer, maxN, generator);
-            executor.execute(producerTask);
-        }
+        Producer producer = new Producer();
+        int maxN = numOfMessages;
+        Runnable producerTask = new ProducerTask(producer, maxN, generator);
+        executor.execute(producerTask);
 
         long startConsumer = System.currentTimeMillis();
 
-        for (int i = 0; i < NUM_CONSUMERS; i++) {
-            MessageReceiver receiver = new MessageReceiver();
-            Runnable consumerTask = new ConsumerTask(receiver);
-            executor.execute(consumerTask);
-        }
+        MessageReceiver receiver = new MessageReceiver();
+        Runnable consumerTask = new ConsumerTask(receiver);
+        executor.execute(consumerTask);
+
         executor.shutdown();
         while (!executor.isTerminated()) {
             try {
@@ -66,4 +63,12 @@ public class App {
         System.out.println(format);
     }
 }
-
+// Instant before = Instant.now();
+//        total = IntStream.of(3, 1, 4, 1, 5, 9)
+//                .parallel()
+//                .map(ParallelDemo::doubleIt)
+//                .sum();
+//        Instant after = Instant.now();
+//        Duration duration = Duration.between(before, after);
+//        System.out.println("Total of doubles = " + total);
+//        System.out.println("time = " + duration.toMillis() + " ms");

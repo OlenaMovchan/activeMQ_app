@@ -72,6 +72,7 @@ public class GeneratorMessages {
         LOGGER.info("Send poisonPill");
         LOGGER.info("Total messages sent: " + countSentMessages.get());
         double sendingSpeed = countSentMessages.get() / (elapsedTime / 1000.0);
+        LOGGER.info("Time producer: " + elapsedTime/1000 + " s");
         LOGGER.info("Sending speed: " + sendingSpeed + " messages per second");
         producer.closeConection();
         LOGGER.info("End of message generation");

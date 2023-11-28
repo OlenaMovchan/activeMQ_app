@@ -55,11 +55,11 @@ public class App {
 
         double rpsCon = numOfMessages / ((System.currentTimeMillis() - startConsumer) / 1000);
 
-        LOGGER.info("timeProducer " + timeProducer);
-        LOGGER.info("rps producer  = " + rps);
+        //LOGGER.info("timeProducer " + timeProducer);
+        //LOGGER.info("rps producer  = " + rps);
 
-        LOGGER.info("timeConsumer " + (System.currentTimeMillis() - startConsumer) / 1000);
-        LOGGER.info("rps Consumer  = " + rpsCon);
+        //LOGGER.info("timeConsumer " + (System.currentTimeMillis() - startConsumer) / 1000);
+        //LOGGER.info("rps Consumer  = " + rpsCon);
     }
 }
 

@@ -46,7 +46,7 @@ public class MessageReceiver {
                     long elapsedTime = System.currentTimeMillis() - startTime;
                     double receivingngSpeed = countReceiveMessages.get() / (elapsedTime / 1000.0);
                     LOGGER.info("Total messages received   " + countReceiveMessages.get());
-                    LOGGER.info("Time consumer: " + elapsedTime + " s");
+                    LOGGER.info("Time consumer: " + elapsedTime/1000 + " s");
                     LOGGER.info("Receive speed: " + receivingngSpeed + " messages per second");
                     consumer.closeConnection();
                     break;
